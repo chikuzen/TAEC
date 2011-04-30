@@ -18,10 +18,10 @@ import getopt
 import math
 
 def set_default():
-    width   = int(1920) 
-    height  = int(1080)
-    fpsnum  = int(24000)
-    fpsden  = int(1001)
+    width   = int(1920) # must integer
+    height  = int(1080) # must integer
+    fpsnum  = int(24000) # must integer
+    fpsden  = int(1001) # must integer
     profile = 'high'
     mode    = 'progressive'
     return [[width, height], [fpsnum, fpsden], profile, mode]
@@ -61,11 +61,11 @@ def check_profile(profile, ipflag):
     sys.exit()
 
 def calc_bs(resolution, fps, ipflag):
-    fstmp = [int(math.ceil(i / 16)) for i in resolution]
+    fstmp = [int(math.ceil(float(i) / 16)) for i in resolution]
     fs = dbp = fstmp[0] * fstmp[1]
     mbps  = fs * fps[0] // fps[1]
     if ipflag == 'interlaced':
-        dbp += fstmp[0] * (fstmp[1] % 2)
+        dbp += fstmp[0] * (fstmp[1] & 1)
     return [mbps, fs, dbp]
 
 def calc_lv(bs, ip, spec):
